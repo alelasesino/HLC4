@@ -1,33 +1,15 @@
 
-from datetime import datetime
-from api.utils import string_state
-
-
-class Task:
-    """Modelo de una tarea
+class Product:
+    """Modelo de un producto
     """
-    def __init__(self, id:int, fecha:datetime, descripcion:str, prioridad:int, estado:int):
+    def __init__(self, id:int, nombre:str, descripcion:str, precio:float, imagen:str):
         self.id = id
-        self.fecha = fecha
+        self.nombre = nombre
         self.descripcion = descripcion
-        self.prioridad = prioridad
-        self.estado = estado
-        self.estadostr = string_state(estado)
+        self.precio = precio
+        self.imagen = imagen
 
     @classmethod
-    def new_task(cls):
-        return cls(-1, datetime.now(), '', 0, 0)
+    def new_product(cls):
+        return cls(-1, '', '', 0, '')
 
-
-class User:
-    """Modelo de un usuario
-    """
-    def __init__(self, username:str, password:str, nickname:str, permission:str):
-        self.username = username
-        self.password = password
-        self.nickname = nickname
-        self.permission = permission
-
-    @classmethod
-    def new_user(cls):
-        return cls("", "", "", "")
