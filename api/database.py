@@ -5,10 +5,10 @@ from api.models import Product
 
 
 db = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="",
-  database="productos"
+  host="sql7.freemysqlhosting.net",      #sql7.freemysqlhosting.net   #localhost
+  user="sql7322310",                     #sql7322310                  #root
+  passwd="zusIgSCSUM",                   #zusIgSCSUM                  #
+  database="sql7322310"                  #sql7322310                  #productos
 )
 
 
@@ -20,7 +20,7 @@ def products():
     """
     with closing(db.cursor()) as c:
 
-        sql_query = "SELECT id, nombre, descripcion, precio, imagen FROM product"
+        sql_query = "SELECT id, nombre, descripcion, precio, imagen FROM producto"
         c.execute(sql_query)
 
         products = []
@@ -48,7 +48,7 @@ def product(product_id: int):
     """
     with closing(db.cursor()) as c:
 
-        sql_query = "SELECT id, nombre, descripcion, precio, imagen FROM product WHERE id = %s"
+        sql_query = "SELECT id, nombre, descripcion, precio, imagen FROM producto WHERE id = %s"
         c.execute(sql_query, [product_id])
         
         result = c.fetchone()
@@ -75,7 +75,7 @@ def insert_product(product: dict):
     """
     with closing(db.cursor()) as c:
 
-        sql_query = "INSERT INTO product(nombre, descripcion, precio, imagen) VALUES(%s, %s, %s, %s)"
+        sql_query = "INSERT INTO producto(nombre, descripcion, precio, imagen) VALUES(%s, %s, %s, %s)"
         c.execute(sql_query, (product["nombre"], product["descripcion"], product["precio"], product["imagen"]))
         db.commit()
 
@@ -88,7 +88,7 @@ def delete_product(product_id: int):
     """
     with closing(db.cursor()) as c:
         
-        sql_query = "DELETE FROM product WHERE id = %s"
+        sql_query = "DELETE FROM producto WHERE id = %s"
         c.execute(sql_query, [product_id])
         db.commit()
 
@@ -101,7 +101,7 @@ def update_product(product: dict):
     """
     with closing(db.cursor()) as c:
         
-        sql_query = "UPDATE product SET nombre = %s, descripcion = %s, precio = %s, imagen = %s WHERE id = %s"
+        sql_query = "UPDATE producto SET nombre = %s, descripcion = %s, precio = %s, imagen = %s WHERE id = %s"
         c.execute(sql_query, (product["nombre"], product["descripcion"], product["precio"], product["imagen"], product["id"]))
         db.commit()
 
