@@ -1,6 +1,0 @@
-Flask 
-Flask-Script
-Flask-Bootstrap
-mysql-connector
-graphene
-gunicorn
