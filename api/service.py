@@ -1,5 +1,5 @@
 
-from flask import Flask, request, redirect, url_for, abort, make_response, render_template
+from flask import request, redirect, url_for
 from flask import jsonify
 from api import app
 from api.models import Product
@@ -19,7 +19,13 @@ def root():
 @app.route('/products', methods=['GET'])
 def products():
     logging.debug(" GET /products")
-    return jsonify(database.products())
+
+    try:
+        products = database.products()
+    except Exception as err:
+        return error_response(err, 400)
+
+    return error_response("Fake error", 400)
 
 
 @app.route('/product/<int:product_id>', methods=['GET'])
@@ -71,7 +77,5 @@ def delete_product(product_id):
     return jsonify(product)
 
 
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template("error.html", error="Página no encontrada...")
-
+def error_response(message, error=500):
+    return jsonify({"error": 1, "message": message}), error
