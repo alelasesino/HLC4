@@ -9,7 +9,7 @@ class Product:
         self.precio = precio
         self.imagen = imagen
 
-    @classmethod
-    def new_product(cls):
-        return cls(-1, '', '', 0, '')
+    @staticmethod
+    def new_product():
+        return Product(-1, '', '', 0, '')
 
