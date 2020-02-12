@@ -3,8 +3,9 @@ from flask import request, redirect, url_for
 from flask import jsonify
 from api import app
 from api.models import Product
-from api.utils import to_float
-import api.database as database
+from api.utils import to_float, format_object_id, get_tags
+#import api.database as database
+import api.database_mongo as database
 import logging
 
 
@@ -29,9 +30,9 @@ def products():
     return jsonify(products)
 
 
-@app.route('/product/<int:product_id>', methods=['GET'])
+@app.route('/product/<string:product_id>', methods=['GET'])
 def product(product_id):
-    logging.debug(" GET /product/" + str(product_id))
+    logging.debug(" GET /product/" + product_id)
 
     try:
         product = database.product(product_id)
@@ -59,12 +60,12 @@ def insert_product():
         database.insert_product(product)
     except Exception as err:
         return error_response([str(err)], 400, product)
+    
+    return jsonify({"error": 0, "data": format_object_id(product)})
 
-    return jsonify({"error": 0, "data": product})
 
-
-@app.route('/product/<int:product_id>', methods=['PUT'])
-def update_product(product_id):
+@app.route('/product/<string:product_id>', methods=['PUT'])
+def update_product(product_id: str):
     logging.debug(" PUT /product")
 
     product = product_body_request(product_id)
@@ -81,16 +82,16 @@ def update_product(product_id):
     except Exception as err:
         return error_response([str(err)], 400, product)
 
-    return jsonify({"error": 0, "data": product})
+    return jsonify({"error": 0, "data": format_object_id(product)})
 
 
-@app.route('/product/<int:product_id>', methods=['DELETE'])
+@app.route('/product/<string:product_id>', methods=['DELETE'])
 def delete_product(product_id):
     logging.debug(" DELETE /product/" + str(product_id))
 
     try:
         product = database.product(product_id)
-
+        
         if database.product(product_id) == None:
             return error_response(["Product not exist!"], 400, product)  
 
@@ -140,6 +141,11 @@ def product_body_request(id=None):
 
     if id != None:
         product["id"] = id
+
+    tags = get_tags(request.form.get('tags'))
+    
+    if tags != None:
+        product["tags"] = tags
 
     return product
 

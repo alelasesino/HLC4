@@ -4,14 +4,14 @@ from contextlib import closing
 from api.models import Product
 
 
-"""config = {
+"""MYSQL_CONFIG = {
     "host": "localhost",
     "user": "root",
     "passwd": "",
     "database": "productos"
 }"""
 
-config = {
+MYSQL_CONFIG = {
     "host": "sql7.freemysqlhosting.net",
     "user": "sql7322310",
     "passwd": "zusIgSCSUM",
@@ -20,10 +20,10 @@ config = {
 
 
 db = mysql.connector.connect(
-  host=config["host"],
-  user=config["user"],
-  passwd=config["passwd"],
-  database=config["database"]
+  host=MYSQL_CONFIG["host"],
+  user=MYSQL_CONFIG["user"],
+  passwd=MYSQL_CONFIG["passwd"],
+  database=MYSQL_CONFIG["database"]
 )
 
 
@@ -52,11 +52,11 @@ def products():
     return products
 
 
-def product(product_id: int):
+def product(product_id: str):
     """Obtiene los datos de un producto por su id
     
     Arguments:
-        product_id {int} -- Id del producto
+        product_id {str} -- Id del producto
     
     Returns:
         Product -- Datos del producto seleccionado
@@ -95,11 +95,11 @@ def insert_product(product: dict):
         db.commit()
 
 
-def delete_product(product_id: int):
+def delete_product(product_id: str):
     """Elimina el producto deseado en la base de datos
     
     Arguments:
-        product_id {int} -- Id del producto para borrar
+        product_id {str} -- Id del producto para borrar
     """
     with closing(db.cursor()) as c:
         
