@@ -51,9 +51,12 @@ def insert_product():
         "imagen": request.form.get('imagen')
     }
 
-    database.insert_product(product)
+    try:
+        database.insert_product(product)
+    except Exception as err:
+        return error_response(err, 400, product)
 
-    return jsonify(product)
+    return jsonify({"error": 0, "data": product})
 
 
 @app.route('/product/<int:product_id>', methods=['PUT'])
