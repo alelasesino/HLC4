@@ -25,13 +25,19 @@ def products():
     except Exception as err:
         return error_response(err, 400)
 
-    return error_response("Fake error", 400)
+    return jsonify(products)
 
 
 @app.route('/product/<int:product_id>', methods=['GET'])
 def product(product_id):
     logging.debug(" GET /product/" + str(product_id))
-    return jsonify(database.product(product_id))
+
+    try:
+        product = database.product(product_id)
+    except Exception as err:
+        return error_response(err, 400)
+
+    return jsonify(product)
 
 
 @app.route('/product', methods=['POST'])
@@ -77,5 +83,14 @@ def delete_product(product_id):
     return jsonify(product)
 
 
-def error_response(message, error=500):
-    return jsonify({"error": 1, "message": message}), error
+def error_response(message, error_code=500, data=None):
+
+    error = {
+        "error": 1,
+        "message": str(message)
+    }
+
+    if(data != None):
+        error["data"] = data
+
+    return jsonify(error), error_code

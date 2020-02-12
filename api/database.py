@@ -4,19 +4,19 @@ from contextlib import closing
 from api.models import Product
 
 
-config = {
+"""config = {
     "host": "localhost",
     "user": "root",
     "passwd": "",
     "database": "productos"
-}
+}"""
 
-"""config = {
+config = {
     "host": "sql7.freemysqlhosting.net",
     "user": "sql7322310",
     "passwd": "zusIgSCSUM",
     "database": "sql7322310"
-}"""
+}
 
 
 db = mysql.connector.connect(
