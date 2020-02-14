@@ -27,7 +27,7 @@ def products():
     except Exception as err:
         return error_response([str(err)], 400)
 
-    return jsonify({"error": 0, "data": product})
+    return jsonify({"error": 0, "data": products})
 
 
 @app.route('/product/<string:product_id>', methods=['GET'])
