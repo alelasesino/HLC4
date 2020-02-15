@@ -77,5 +77,5 @@ def update_product(product: dict):
     new_product = product.copy()
     new_product.pop("id")
 
-    collection.update_one({"_id": ObjectId(product["id"])}, new_product)
+    collection.replace_one({"_id": ObjectId(product["id"])}, new_product)
 
