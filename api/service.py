@@ -54,7 +54,6 @@ def root():
 @jwt_required
 def products():
     logging.debug(" GET /products")
-    print("hola")
     try:
         products = database.products()
     except Exception as err:
