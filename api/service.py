@@ -35,7 +35,13 @@ def jwt_required(function):
 
 @app.route('/login')
 def login():
-    token = jwt.encode({"user": current_milis()},  app.config['SECRET_KEY']) #"exp": token_time_expire(15)
+    token = jwt.encode({"user": current_milis()},  app.config['SECRET_KEY'])
+    return jsonify({"token": token.decode('UTF-8')})
+
+
+@app.route('/login/<int:expire>')
+def login_expire(expire):
+    token = jwt.encode({"user": current_milis(), "exp": token_time_expire(expire)},  app.config['SECRET_KEY']) 
     return jsonify({"token": token.decode('UTF-8')})
 
 
