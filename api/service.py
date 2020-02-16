@@ -3,14 +3,40 @@ from flask import request, redirect, url_for
 from flask import jsonify
 from api import app
 from api.models import Product
-from api.utils import to_float, format_object_id, get_tags
+from api.utils import to_float, format_object_id, get_tags, token_time_expire, current_milis
+from functools import wraps
 #import api.database as database
 import api.database_mongo as database
 import logging
-
+import jwt
 
 LOG_FILENAME = "service.log"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
+
+
+def jwt_required(function):
+
+    @wraps(function)
+    def decorated(*args, **kwargs):
+        token = request.args.get('token')
+        
+        if not token:
+            return jsonify({"error": 1, "message": "Token is missing!"}), 403
+
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+        except:
+            return jsonify({"error": 1, "message": "Token is invalid!"}), 403
+
+        return function(*args, **kwargs)
+
+    return decorated
+
+
+@app.route('/login')
+def login():
+    token = jwt.encode({"user": current_milis()},  app.config['SECRET_KEY']) #"exp": token_time_expire(15)
+    return jsonify({"token": token.decode('UTF-8')})
 
 
 @app.route('/')
@@ -19,9 +45,10 @@ def root():
 
 
 @app.route('/products', methods=['GET'])
+@jwt_required
 def products():
     logging.debug(" GET /products")
-
+    print("hola")
     try:
         products = database.products()
     except Exception as err:
@@ -31,6 +58,7 @@ def products():
 
 
 @app.route('/product/<string:product_id>', methods=['GET'])
+@jwt_required
 def product(product_id):
     logging.debug(" GET /product/" + product_id)
 
@@ -47,6 +75,7 @@ def product(product_id):
 
 
 @app.route('/product', methods=['POST'])
+@jwt_required
 def insert_product():
     logging.debug(" POST /product")
 
@@ -65,6 +94,7 @@ def insert_product():
 
 
 @app.route('/product/<string:product_id>', methods=['PUT'])
+@jwt_required
 def update_product(product_id: str):
     logging.debug(" PUT /product")
 
@@ -86,6 +116,7 @@ def update_product(product_id: str):
 
 
 @app.route('/product/<string:product_id>', methods=['DELETE'])
+@jwt_required
 def delete_product(product_id):
     logging.debug(" DELETE /product/" + str(product_id))
 
