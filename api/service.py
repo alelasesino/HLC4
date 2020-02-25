@@ -5,6 +5,7 @@ from api import app
 from api.models import Product
 from api.utils import to_float, format_object_id, get_tags, token_time_expire, current_milis
 from functools import wraps
+from flasgger import Swagger, swag_from
 #import api.database as database
 import api.database_mongo as database
 import logging
@@ -13,6 +14,7 @@ import jwt
 LOG_FILENAME = "service.log"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
+swagger = Swagger(app)
 
 def jwt_required(function):
 
@@ -53,9 +55,11 @@ def root():
 
 
 @app.route('/products', methods=['GET'])
+@swag_from('./swagger/products.yaml')
 @jwt_required
 def products():
     logging.debug(" GET /products")
+
     try:
         products = database.products()
     except Exception as err:
@@ -65,6 +69,7 @@ def products():
 
 
 @app.route('/product/<string:product_id>', methods=['GET'])
+@swag_from('./swagger/product.yaml')
 @jwt_required
 def product(product_id):
     logging.debug(" GET /product/" + product_id)
@@ -82,6 +87,7 @@ def product(product_id):
 
 
 @app.route('/product', methods=['POST'])
+@swag_from('./swagger/post_product.yaml')
 @jwt_required
 def insert_product():
     logging.debug(" POST /product")

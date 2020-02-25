@@ -1,0 +1,60 @@
+summary: Añadir un nuevo producto
+tags:
+- product
+description: Añade un nuevo producto
+consumes:
+- "application/x-www-form-urlencoded"
+produces:
+- "application/json"
+
+parameters:
+- name: "Authorization"
+  in: "header"
+  required: true
+  type: "string"
+
+- in: "formData"
+  name: "nombre"
+  description: "Nombre del producto"
+  required: true
+  type: string
+
+- in: "formData"
+  name: "descripcion"
+  description: "Descripción del producto"
+  required: true
+  type: string
+
+- in: "formData"
+  name: "precio"
+  description: "Precio del producto"
+  required: true
+  type: number
+
+- in: "formData"
+  name: "imagen"
+  description: "Nombre de la imagen del producto"
+  required: false
+  type: string
+
+responses:
+  200:
+    description: Producto añadido correctamente
+    schema:
+      type: object
+      properties:
+        data:
+          $ref: "#/definitions/Product"
+            
+        error:
+          type: integer
+          enum: [0, 1]
+
+  400:
+    description: El producto no existe
+    schema:
+      $ref: "#/definitions/Error"
+  403:
+    description: Acceso restringido
+    schema:
+      $ref: "#/definitions/Error"

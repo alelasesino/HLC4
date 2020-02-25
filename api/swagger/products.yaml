@@ -1,0 +1,93 @@
+swagger: "2.0"
+info:
+  title: "Swagger Petstore"
+  description: "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters."
+  version: "1.0.0"
+  termsOfService: "https://www.youtube.com/watch?v=_a-gbqAzHOM"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+
+
+
+summary: Obtener la lista de los productos
+tags:
+- product
+description: Obtiene la lista de productos
+produces:
+- "application/json"
+parameters:
+- name: "Authorization"
+  in: "header"
+  required: true
+  type: "string"
+responses:
+  200:
+    description: Listado de productos
+    schema:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/definitions/Product"
+        error:
+          type: integer
+          enum: [0, 1]
+
+  403:
+    description: Acceso restringido
+    schema:
+      $ref: "#/definitions/Error"
+
+definitions:
+  Error:
+    type: object
+    properties:
+      error:
+        type: integer
+        enum: [0, 1]
+        example: 1 
+        description: "0: Existoso, 1: Ocurrio un error"
+      message:
+        type: string
+        example: Se produjo un error
+        description: Razón por la que se produjo el error
+  Product:
+    type: object
+    required:
+      - nombre
+      - descripcion
+      - precio
+    properties:
+      _id:
+        type: string
+        example: 5e4419383bf41d0546b5b249
+      nombre: 
+        type: string
+        example: Coca Cola
+      descripcion: 
+        type: string
+        example: Este producto es maravilloso
+      precio: 
+        type: string
+        example: 1.5
+      imagen: 
+        type: string
+        example: coca_cola.png
+      tags:
+        type: array
+        items:
+          type: string
+          example: 
+          - Bebida
+          - Refresco
+
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
