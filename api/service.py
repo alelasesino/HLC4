@@ -18,8 +18,9 @@ def jwt_required(function):
 
     @wraps(function)
     def decorated(*args, **kwargs):
-        token = request.args.get('token')
-        
+        auth = request.headers.get('Authorization')
+        token = auth.replace("Bearer ", "")
+
         if not token:
             return jsonify({"error": 1, "message": "Token is missing!"}), 403
 
