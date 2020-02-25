@@ -21,7 +21,7 @@ def jwt_required(function):
         auth = request.headers.get('Authorization')
 
         if not auth:
-            return jsonify({"error": 1, "message": "Token is missing!"}), 403
+            return jsonify({"error": 1, "message": "Authentication is required!"}), 403
 
         token = auth.replace("Bearer ", "")
 
