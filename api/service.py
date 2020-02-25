@@ -19,10 +19,11 @@ def jwt_required(function):
     @wraps(function)
     def decorated(*args, **kwargs):
         auth = request.headers.get('Authorization')
-        token = auth.replace("Bearer ", "")
 
-        if not token:
+        if not auth:
             return jsonify({"error": 1, "message": "Token is missing!"}), 403
+
+        token = auth.replace("Bearer ", "")
 
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
