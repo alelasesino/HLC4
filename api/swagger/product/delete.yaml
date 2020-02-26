@@ -1,0 +1,48 @@
+summary: Borrar un producto
+security:
+  - ApiKeyAuth: []
+tags:
+- Producto
+description: Borra un producto
+produces:
+- "application/json"
+parameters:
+- name: "product_id"
+  in: "path"
+  required: true
+  type: "string"
+responses:
+  200:
+    description: Producto borrado
+    schema:
+      type: object
+      properties:
+        data:
+          $ref: "#/definitions/Product" 
+        error:
+          type: integer
+          enum: [0, 1]
+  400:
+    description: El producto no existe
+    schema:
+      type: object
+      properties:
+        error:
+          type: integer
+          enum: [0, 1]
+          example: 1
+        message:
+          type: string
+          example: Product not exist!
+  403:
+    description: Acceso restringido
+    schema:
+      type: object
+      properties:
+        error:
+          type: integer
+          enum: [0, 1]
+          example: 1
+        message:
+          type: string
+          example: Authentication is required!

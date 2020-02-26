@@ -1,0 +1,78 @@
+summary: Actualizar un producto
+security:
+  - ApiKeyAuth: []
+tags:
+- Producto
+description: Actualiza un producto
+consumes:
+- "application/x-www-form-urlencoded"
+produces:
+- "application/json"
+
+parameters:
+- name: "product_id"
+  in: "path"
+  required: true
+  type: "string"
+
+- in: "formData"
+  name: "nombre"
+  description: "Nombre"
+  required: true
+  type: string
+
+- in: "formData"
+  name: "descripcion"
+  description: "Descripción"
+  required: true
+  type: string
+
+- in: "formData"
+  name: "precio"
+  description: "Precio"
+  required: true
+  type: number
+
+- in: "formData"
+  name: "imagen"
+  description: "Nombre de la imagen"
+  required: false
+  type: string
+
+responses:
+  200:
+    description: Producto actualizado correctamente
+    schema:
+      type: object
+      properties:
+        data:
+          $ref: "#/definitions/Product"  
+        error:
+          type: integer
+          enum: [0, 1]
+  400:
+    description: Valores no válidos
+    schema:
+      type: object
+      properties:
+        error:
+          type: integer
+          enum: [0, 1]
+          example: 1
+        message:
+          type: string
+          example: Product not exist!
+        data:
+          $ref: "#/definitions/Product"
+  403:
+    description: Acceso restringido
+    schema:
+      type: object
+      properties:
+        error:
+          type: integer
+          enum: [0, 1]
+          example: 1
+        message:
+          type: string
+          example: Authentication is required!

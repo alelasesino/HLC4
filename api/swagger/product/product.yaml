@@ -1,14 +1,12 @@
 summary: Obtener datos de un producto
+security:
+  - ApiKeyAuth: []
 tags:
-- product
+- Producto
 description: Obtiene los datos de un producto
 produces:
 - "application/json"
 parameters:
-- name: "Authorization"
-  in: "header"
-  required: true
-  type: "string"
 - name: "product_id"
   in: "path"
   required: true
@@ -20,17 +18,31 @@ responses:
       type: object
       properties:
         data:
-          $ref: "#/definitions/Product"
-            
+          $ref: "#/definitions/Product" 
         error:
           type: integer
           enum: [0, 1]
-
   400:
     description: El producto no existe
     schema:
-      $ref: "#/definitions/Error"
+      type: object
+      properties:
+        error:
+          type: integer
+          enum: [0, 1]
+          example: 1
+        message:
+          type: string
+          example: Product not exist!
   403:
     description: Acceso restringido
     schema:
-      $ref: "#/definitions/Error"
+      type: object
+      properties:
+        error:
+          type: integer
+          enum: [0, 1]
+          example: 1
+        message:
+          type: string
+          example: Authentication is required!

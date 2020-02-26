@@ -1,29 +1,11 @@
-swagger: "2.0"
-info:
-  title: "Swagger Petstore"
-  description: "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters."
-  version: "1.0.0"
-  termsOfService: "https://www.youtube.com/watch?v=_a-gbqAzHOM"
-  contact:
-    email: "apiteam@swagger.io"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "petstore.swagger.io"
-
-
-
 summary: Obtener la lista de los productos
+security:
+  - ApiKeyAuth: []
 tags:
-- product
+- Producto
 description: Obtiene la lista de productos
 produces:
 - "application/json"
-parameters:
-- name: "Authorization"
-  in: "header"
-  required: true
-  type: "string"
 responses:
   200:
     description: Listado de productos
@@ -37,11 +19,18 @@ responses:
         error:
           type: integer
           enum: [0, 1]
-
   403:
     description: Acceso restringido
     schema:
-      $ref: "#/definitions/Error"
+      type: object
+      properties:
+        error:
+          type: integer
+          enum: [0, 1]
+          example: 1
+        message:
+          type: string
+          example: Authentication is required!
 
 definitions:
   Error:
@@ -80,14 +69,5 @@ definitions:
         example: coca_cola.png
       tags:
         type: array
-        items:
-          type: string
-          example: 
-          - Bebida
-          - Refresco
-
-securityDefinitions:
-  api_key:
-    type: "apiKey"
-    name: "Authorization"
-    in: "header"
+        example: [Bebida, Refresco]
+          

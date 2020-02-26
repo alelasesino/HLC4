@@ -14,7 +14,32 @@ import jwt
 LOG_FILENAME = "service.log"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
 
-swagger = Swagger(app)
+swagger_template = {
+    'securityDefinitions': { 
+        'ApiKeyAuth': { 
+            'type': 'apiKey', 
+            'in': 'header', 
+            'name': 'Authorization'
+        }
+    },
+    'schemes': ['http', 'https'],
+    'info': {
+        'description': 'Servicio REST realizado el 26/02/2020',
+        'version': '1.1.2',
+        'title': 'Inventario',
+        'termsOfService': 'http://swagger.io/terms/',
+        'contact': {
+            'name': 'the developer',
+            'email': 'alejperez99@hotmail.com'
+        },
+        'license': {
+            'name': 'Developer GitHub',
+            'url': 'https://github.com/alelasesino/HLC4'
+        }
+    }
+}
+
+swagger = Swagger(app, template=swagger_template)
 
 def jwt_required(function):
 
@@ -55,7 +80,7 @@ def root():
 
 
 @app.route('/products', methods=['GET'])
-@swag_from('./swagger/products.yaml')
+@swag_from('./swagger/product/products.yaml')
 @jwt_required
 def products():
     logging.debug(" GET /products")
@@ -69,7 +94,7 @@ def products():
 
 
 @app.route('/product/<string:product_id>', methods=['GET'])
-@swag_from('./swagger/product.yaml')
+@swag_from('./swagger/product/product.yaml')
 @jwt_required
 def product(product_id):
     logging.debug(" GET /product/" + product_id)
@@ -87,7 +112,7 @@ def product(product_id):
 
 
 @app.route('/product', methods=['POST'])
-@swag_from('./swagger/post_product.yaml')
+@swag_from('./swagger/product/insert.yaml')
 @jwt_required
 def insert_product():
     logging.debug(" POST /product")
@@ -107,6 +132,7 @@ def insert_product():
 
 
 @app.route('/product/<string:product_id>', methods=['PUT'])
+@swag_from('./swagger/product/update.yaml')
 @jwt_required
 def update_product(product_id: str):
     logging.debug(" PUT /product")
@@ -129,6 +155,7 @@ def update_product(product_id: str):
 
 
 @app.route('/product/<string:product_id>', methods=['DELETE'])
+@swag_from('./swagger/product/delete.yaml')
 @jwt_required
 def delete_product(product_id):
     logging.debug(" DELETE /product/" + str(product_id))
