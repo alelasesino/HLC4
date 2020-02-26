@@ -40,6 +40,14 @@ parameters:
   required: false
   type: string
 
+- in: "formData"
+  name: "tags"
+  description: "Tags"
+  required: false
+  type: array
+  items:
+    type: string
+
 responses:
   200:
     description: Producto actualizado correctamente

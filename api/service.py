@@ -63,14 +63,14 @@ def jwt_required(function):
 
 
 @app.route('/login')
-@swag_from('./swagger/login.yaml')
+@swag_from('./swagger/authentication/login.yaml')
 def login():
     token = jwt.encode({"user": current_milis()},  app.config['SECRET_KEY'])
     return jsonify({"token": token.decode('UTF-8')})
 
 
 @app.route('/login/<int:expire>')
-@swag_from('./swagger/login_expire.yaml')
+@swag_from('./swagger/authentication/login_expire.yaml')
 def login_expire(expire):
     token = jwt.encode({"user": current_milis(), "exp": token_time_expire(expire)},  app.config['SECRET_KEY']) 
     return jsonify({"token": token.decode('UTF-8')})

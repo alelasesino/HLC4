@@ -10,7 +10,7 @@ def to_float(price: str):
 
 def get_tags(tags: str):
     if tags != None:
-        return tags.split(";")
+        return tags.split(",")
     return None
 
 def format_object_id(product):
