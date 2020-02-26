@@ -31,11 +31,11 @@ swagger_template = {
         'contact': {
             'name': 'the developer',
             'email': 'alejperez99@hotmail.com'
-        },
-        'license': {
-            'name': 'Developer GitHub',
-            'url': 'https://github.com/alelasesino/HLC4'
         }
+    },
+    'externalDocs': {
+        'description': 'Developer GitHub',
+        'url': 'https://github.com/alelasesino/HLC4'
     }
 }
 

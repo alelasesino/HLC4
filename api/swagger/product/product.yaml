@@ -1,4 +1,4 @@
-summary: Obtener datos de un producto
+summary: Obtener un producto
 security:
   - ApiKeyAuth: []
 tags:
