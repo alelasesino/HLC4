@@ -1,0 +1,15 @@
+summary: Obtener llave de autenticación
+tags:
+- Autenticación
+description: Obtiene una llave de autenticación
+produces:
+- "application/json"
+responses:
+  200:
+    description: LLave de autenticación
+    schema:
+      type: object
+      properties:
+        token:
+          type: string
+          example: fyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoxNTgyNzIyMjU2NTQzfQ._QCfKo4kGl5F9xtkIoOq7-ikxM3OSshAVRJPQOE3WRg

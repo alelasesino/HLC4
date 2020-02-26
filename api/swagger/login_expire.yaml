@@ -1,0 +1,21 @@
+summary: Obtener llave de autenticación limitada
+tags:
+- Autenticación
+description: Obtiene una llave de autenticación con tiempo limitado
+produces:
+- "application/json"
+parameters:
+- name: "expire"
+  in: "path"
+  required: true
+  type: "string"
+  description: Expiración en segundos
+responses:
+  200:
+    description: LLave de autenticación
+    schema:
+      type: object
+      properties:
+        token:
+          type: string
+          example: kyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoxNTgyNzIyNDk2NjI5LCJleHAiOjE1ODI3MjI1MDF9.gWhhIA0JjZAsi9GH1Gd0MJEKgvvNyYlMymzuNpUrXDE
