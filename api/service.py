@@ -22,7 +22,7 @@ swagger_template = {
             'name': 'Authorization'
         }
     },
-    'schemes': ['http', 'https'],
+    'schemes': ['https','http'],
     'info': {
         'description': 'Servicio REST realizado el 26/02/2020',
         'version': '1.1.2',
