@@ -1,5 +1,5 @@
 
-from flask import request, redirect, url_for
+from flask import request, redirect, url_for, send_file
 from flask import jsonify
 from api import app
 from api.models import Product
@@ -10,6 +10,10 @@ from flasgger import Swagger, swag_from
 import api.database_mongo as database
 import logging
 import jwt
+import os
+
+UPLOAD_FOLDER = 'static/images'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 LOG_FILENAME = "service.log"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.DEBUG)
@@ -60,6 +64,18 @@ def jwt_required(function):
         return function(*args, **kwargs)
 
     return decorated
+
+
+@app.route('/image/<string:id>', methods=['GET'])
+#@jwt_required
+def image(id: str):
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(basedir, app.config['UPLOAD_FOLDER'], id + '.png')
+
+    if os.path.isfile(path):
+        return send_file(path)
+    else:
+        return jsonify({"error": 1, "message": "Image not exist!"}), 404
 
 
 @app.route('/login')
@@ -127,9 +143,10 @@ def insert_product():
 
     try:
         database.insert_product(product)
+        upload_image(format_object_id(product))
     except Exception as err:
         return error_response([str(err)], 400, product)
-    
+
     return jsonify({"error": 0, "data": format_object_id(product)})
 
 
@@ -150,6 +167,7 @@ def update_product(product_id: str):
             return error_response(errors, 400, product) 
 
         database.update_product(product)
+        upload_image({"_id": product_id})
     except Exception as err:
         return error_response([str(err)], 400, product)
 
@@ -169,6 +187,7 @@ def delete_product(product_id):
             return error_response(["Product not exist!"], 400, product)  
 
         database.delete_product(product_id)
+        delete_image(product_id)
     except Exception as err:
         return error_response([str(err)], 400, product)
 
@@ -204,14 +223,13 @@ def validate_product(product: dict):
 
 
 def product_body_request(id=None):
-
+    
     product = {
-        "nombre": request.form.get('nombre'),
+        "nombre": request.form.get('nombre').rstrip("\n\r"),
         "descripcion": request.form.get('descripcion'),
-        "precio": to_float(request.form.get('precio')),
-        "imagen": request.form.get('imagen')
+        "precio": to_float(request.form.get('precio'))
     }
-
+    
     if id != None:
         product["id"] = id
 
@@ -222,3 +240,22 @@ def product_body_request(id=None):
 
     return product
 
+
+def upload_image(product: dict):
+    if 'imagen' in request.files:
+        file = request.files['imagen']
+        if file.filename != '':
+            if file:
+                filename = product["_id"]
+                delete_image(filename)
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                path = os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename + '.png')
+                file.save(path)
+
+
+def delete_image(filename: str):
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(basedir, app.config['UPLOAD_FOLDER'], filename + '.png')
+
+    if os.path.isfile(path):
+        os.remove(path)
