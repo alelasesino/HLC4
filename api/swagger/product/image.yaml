@@ -1,0 +1,30 @@
+summary: Obtener una imagen
+tags:
+- Producto
+description: Obtiene la imagen de un producto
+produces:
+- "image/png"
+parameters:
+- name: "product_id"
+  in: "path"
+  required: true
+  type: "string"
+  description: ID
+responses:
+  200:
+    description: Imagen del producto
+    schema:
+      type: file
+  404:
+    description: El producto no existe
+    schema:
+      type: object
+      properties:
+        error:
+          type: integer
+          enum: [0, 1]
+          example: 1
+        message:
+          type: string
+          example: Product not exist!
+

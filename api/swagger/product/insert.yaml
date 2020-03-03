@@ -5,7 +5,7 @@ tags:
 - Producto
 description: Añade un nuevo producto
 consumes:
-- "application/x-www-form-urlencoded"
+- "multipart/form-data"
 produces:
 - "application/json"
 
@@ -30,9 +30,9 @@ parameters:
 
 - in: "formData"
   name: "imagen"
-  description: "Nombre de la imagen"
+  description: "Imagen"
   required: false
-  type: string
+  type: file
 
 - in: "formData"
   name: "tags"

@@ -66,11 +66,12 @@ def jwt_required(function):
     return decorated
 
 
-@app.route('/image/<string:id>', methods=['GET'])
+@app.route('/image/<string:product_id>', methods=['GET'])
+@swag_from('./swagger/product/image.yaml')
 #@jwt_required
-def image(id: str):
+def image(product_id: str):
     basedir = os.path.abspath(os.path.dirname(__file__))
-    path = os.path.join(basedir, app.config['UPLOAD_FOLDER'], id + '.png')
+    path = os.path.join(basedir, app.config['UPLOAD_FOLDER'], product_id + '.png')
 
     if os.path.isfile(path):
         return send_file(path)
