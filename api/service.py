@@ -66,7 +66,7 @@ def jwt_required(function):
     return decorated
 
 
-@app.route('/image/<string:product_id>', methods=['GET'])
+@app.route('/product/image/<string:product_id>', methods=['GET'])
 @swag_from('./swagger/product/image.yaml')
 #@jwt_required
 def image(product_id: str):
